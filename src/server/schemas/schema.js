@@ -5,7 +5,7 @@ type User {
     id: ID!
     name: String!
     password: String!
-    dataId: [ID]
+    dataIds: [ID]
 }
 
 type Data {
@@ -20,6 +20,7 @@ type Response {
 }
 
 type Query {
+    users: [User]
     user(name: String!, password: String!): User
     data(dataId: ID!): Data
     userData(userId: ID!): [Data]
