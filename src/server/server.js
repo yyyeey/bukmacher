@@ -1,21 +1,48 @@
 import { ApolloServer } from 'apollo-server';
+import { MongoClient } from 'mongodb';
+
 import typeDefs from './schemas/schema';
 import resolvers from './resolvers';
 
-import UserAPI from './datasources/user'
+import UserAPI from './datasources/user';
 
-(async function(){
-    try {
-        const server = new ApolloServer({
-            typeDefs,
-            resolvers,
-            dataSources: () => ({
-                userAPI: new UserAPI(),
-            })
-        });
-        const url = await server.listen();
-        console.log(`Server is ready at ${url}`);
-    } catch (error) {
-        console.error(`[SERVER ERROR] ${error}`);
-    }
-})()
+const SERVER_ADDRESS = 'mongodb://localhost:27017';
+const DATABASE_NAME = 'testDatabase';
+const client = new MongoClient(SERVER_ADDRESS, { useNewUrlParser: true, useUnifiedTopology: true });
+
+process.on('SIGINT', async function() {
+    console.log("Caught interrupt signal");
+    await client.close()
+    console.log("Closed DB connection");
+    process.exit();
+});
+
+const handleError = function(errMsg) {
+    console.error(`[SERVER ERROR] ${errMsg}`);
+    console.trace();
+}
+
+client.connect().then((client, err) => {
+    if(err)
+        handleError(err.message);
+
+    return client.db(DATABASE_NAME);
+}).then((db, err) => {
+    if(err)
+        handleError(err);
+
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+        dataSources: () => ({
+            userAPI: new UserAPI(db, handleError),
+        })
+    });
+    return server.listen();
+    
+}).then((serverInfo, err) => {
+    if(err)
+        handleError(err);
+
+    console.log(`Server is ready at ${serverInfo.url}`);
+});

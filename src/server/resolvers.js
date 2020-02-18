@@ -30,7 +30,7 @@ const resolvers = {
     Query: {
         users: async (_, { pageSize = 2, after }, { dataSources }) => {
             const allUsers = await dataSources.userAPI.users();
-            console.log("DANIEL", JSON.stringify(allUsers))
+            console.log("DEBUG", JSON.stringify(allUsers))
             allUsers.reverse();
             const users = paginateResults({
                 after,

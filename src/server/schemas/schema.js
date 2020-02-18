@@ -2,14 +2,14 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
 type User {
-    id: ID!
+    _id: ID!
     name: String!
     password: String!
     dataIds: [ID]
 }
 
 type Data {
-    id: ID!
+    _id: ID!
     number: Int
     text: String
 }
