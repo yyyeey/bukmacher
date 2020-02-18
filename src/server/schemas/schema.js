@@ -20,10 +20,16 @@ type Response {
 }
 
 type Query {
-    users: [User]
+    users(pageSize: Int, after: String): UserConnection!
     user(name: String!, password: String!): User
     data(dataId: ID!): Data
     userData(userId: ID!): [Data]
+}
+
+type UserConnection {
+    cursor: String!
+    hasMore: Boolean!
+    users: [User]!
 }
 
 type Mutation {

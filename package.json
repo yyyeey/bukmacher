@@ -12,6 +12,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "apollo-datasource": "^0.7.0",
+    "apollo-datasource-mongodb": "^0.2.1",
     "apollo-server": "^2.10.0",
     "mongodb": "^3.5.2",
     "react": "^16.12.0",

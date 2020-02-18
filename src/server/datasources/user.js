@@ -12,6 +12,24 @@ class UserAPI {
             password: "pwd2",
             dataIds: [],
         },
+        {
+            id: "3",
+            name: "user3",
+            password: "pwd3",
+            dataIds: [],
+        },
+        {
+            id: "4",
+            name: "user4",
+            password: "pwd4",
+            dataIds: [],
+        },
+        {
+            id: "5",
+            name: "user5",
+            password: "pwd5",
+            dataIds: [],
+        },
     ];
 
     async users() {
