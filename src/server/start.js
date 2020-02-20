@@ -7,4 +7,6 @@ require('@babel/register')({
 require('@babel/polyfill');
 require('@babel/plugin-proposal-class-properties');
 
+//TODO 2 plugin-proposal-class-properties?
+
 module.exports = require('./server.js');

@@ -6,8 +6,12 @@ class UserAPI {
     }
 
     async users() {
-        // TODO: FIX
-        return this.usersList;
+        try {
+            return await this.usersCollection.find({}).toArray();
+        } catch(err) {
+            this.errorHandler(err)
+            return {};
+        }
     }
 
     async user({ name, password }) {

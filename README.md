@@ -7,6 +7,8 @@ Fix pagination:
 -Add Data and assign it to the Users
 -Add User auth
 
+Babel only transpiles code in own directory and it's subfolders
+
 ## Available Scripts
 
 In the project directory, you can run:

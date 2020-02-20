@@ -23,13 +23,11 @@ const handleError = function(errMsg) {
 }
 
 client.connect().then((client, err) => {
-    if(err)
-        handleError(err.message);
+    err && handleError(err.message);
 
     return client.db(DATABASE_NAME);
 }).then((db, err) => {
-    if(err)
-        handleError(err);
+    err && handleError(err);
 
     const server = new ApolloServer({
         typeDefs,
@@ -41,8 +39,7 @@ client.connect().then((client, err) => {
     return server.listen();
     
 }).then((serverInfo, err) => {
-    if(err)
-        handleError(err);
+    err && handleError(err);
 
     console.log(`Server is ready at ${serverInfo.url}`);
 });

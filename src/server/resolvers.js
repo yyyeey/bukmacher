@@ -1,3 +1,5 @@
+import { getCircularReplacer } from './utils/helper';
+
 const paginateResults = ({
     after: cursor,
     pageSize = 2,
@@ -30,8 +32,9 @@ const resolvers = {
     Query: {
         users: async (_, { pageSize = 2, after }, { dataSources }) => {
             const allUsers = await dataSources.userAPI.users();
-            console.log("DEBUG", JSON.stringify(allUsers))
-            allUsers.reverse();
+
+            console.log("DEBUG", JSON.stringify(allUsers, getCircularReplacer()))
+            // TODO: fix cursors
             const users = paginateResults({
                 after,
                 pageSize,
