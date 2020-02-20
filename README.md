@@ -1,5 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## TODO
+
+Fix pagination:
+-How are cursors supposed to work in this implementation?
+-Add Data and assign it to the Users
+-Add User auth
+
 ## Available Scripts
 
 In the project directory, you can run:
