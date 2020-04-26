@@ -1,0 +1,81 @@
+[1mdiff --git a/src/server/datasources/user.js b/src/server/datasources/user.js[m
+[1mindex 307543d..380a9d5 100644[m
+[1m--- a/src/server/datasources/user.js[m
+[1m+++ b/src/server/datasources/user.js[m
+[36m@@ -40,28 +40,17 @@[m [mclass UserAPI {[m
+     }[m
+ [m
+     async createUser({name, password}) {[m
+[32m+[m[32m        this.usersCollection.insertOne();[m
+         return null;[m
+     }[m
+ [m
+     async loginUser({ name, password }) {[m
+[31m-        console.log("received",name,password)[m
+         try {[m
+             const data = await this.usersCollection.findOne({"$and":[{"name":name},{"password": password}]});[m
+[31m-            console.log("login data")[m
+[31m-            console.log(data)[m
+[31m-            if (!data)[m
+[31m-                throw 'User not found';[m
+[31m-[m
+[31m-            return {[m
+[31m-                message: `Logged in ${name}`,[m
+[31m-                success: true,[m
+[31m-            };[m
+[32m+[m[32m            return data ? Buffer.from(`${name}:${password}`).toString('base64') : null;[m
+         } catch(err) {[m
+             this.errorHandler(err);[m
+[31m-            return {[m
+[31m-                message: `Failed to login: ${err}`,[m
+[31m-                success: false,[m
+[31m-            };[m
+[32m+[m[32m            return null;[m
+         }[m
+     }[m
+ [m
+[1mdiff --git a/src/server/resolvers.js b/src/server/resolvers.js[m
+[1mindex b2444ea..9ec33ad 100644[m
+[1m--- a/src/server/resolvers.js[m
+[1m+++ b/src/server/resolvers.js[m
+[36m@@ -54,10 +54,7 @@[m [mconst resolvers = {[m
+       register: async (_, { name, password }, { dataSources }) => dataSources.userAPI.createUser(name, password),[m
+       login: async (_, { name, password }, { dataSources }) => {[m
+         console.log("resolver",name,password)[m
+[31m-        const user = dataSources.userAPI.loginUser({name, password});[m
+[31m-        console.log(user)[m
+[31m-        if (user)[m
+[31m-          return Buffer.from(name).toString('base64');[m
+[32m+[m[32m        return dataSources.userAPI.loginUser({name, password});[m
+       },[m
+       addUserData: async (_, {  }, { dataSources }) => dataSources.dataAPI.createUserData(data),[m
+       alterData: async () => {},[m
+[1mdiff --git a/src/server/server.js b/src/server/server.js[m
+[1mindex 85294f2..9d178b8 100644[m
+[1m--- a/src/server/server.js[m
+[1m+++ b/src/server/server.js[m
+[36m@@ -35,20 +35,11 @@[m [mclient.connect().then((client, err) => {[m
+         /*context: async ({req}) => {[m
+             console.log("ctx")[m
+             const auth = req.headers && req.headers.authorization || '';[m
+[31m-            const name = Buffer.from(auth, 'base64').toString('ascii');[m
+[31m-            if (!name) {[m
+[31m-                console.log("no context")[m
+[31m-                return null;[m
+[31m-            }[m
+[31m-            [m
+[31m-                console.log("ctx2")[m
+[31m-[m
+[31m-            const users = await db.collection('Users').findOne({"$and":[{"name":name},{"password": password}]});[m
+[31m-            console.log("ctx3")[m
+[31m-[m
+[31m-            console.log(users)[m
+[31m-            const user = users && users[0] || null;[m
+[32m+[m[32m            const [user, password] = Buffer.from(auth, 'base64').toString('ascii').split(':');[m
+[32m+[m[32m            console.log("credentials",credentials)[m
+ [m
+[32m+[m[32m            const user = await db.collection('Users').findOne({"$and":[{"name":name},{"password": password}]});[m
+[32m+[m[32m            console.log(user)[m
+             return { user };[m
+         },*/[m
+         typeDefs,[m

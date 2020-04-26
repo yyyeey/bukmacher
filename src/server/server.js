@@ -1,10 +1,12 @@
 import { ApolloServer } from 'apollo-server';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
+import isEmail from 'isemail';
 
 import typeDefs from './schemas/schema';
 import resolvers from './resolvers';
 
 import UserAPI from './datasources/user';
+import DataAPI from './datasources/data'
 
 const SERVER_ADDRESS = 'mongodb://localhost:27017';
 const DATABASE_NAME = 'testDatabase';
@@ -30,10 +32,25 @@ client.connect().then((client, err) => {
     err && handleError(err);
 
     const server = new ApolloServer({
+        context: async ({req}) => {
+            console.log("ctx")
+            const auth = req.headers && req.headers.authorization || '';
+            const [name, password] = Buffer.from(auth, 'base64').toString('ascii').split(':');
+            console.log("credentials",name, password)
+
+            const user = await db.collection('Users').findOne({"$and":[{"name":name},{"password": password}]});
+            console.log("found user", user)
+            return { 
+                user: {
+                    ...user,
+                }
+            };
+        },
         typeDefs,
         resolvers,
         dataSources: () => ({
             userAPI: new UserAPI(db, handleError),
+            dataAPI: new DataAPI(db, handleError),
         })
     });
     return server.listen();

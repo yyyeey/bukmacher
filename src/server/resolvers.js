@@ -46,7 +46,33 @@ const resolvers = {
                 hasMore: users.length ? users[users.length - 1].cursor !== allUsers[allUsers.length - 1].cursor : false,
             }
         },
+        usersCount: (_, __, { dataSources }) =>  dataSources.userAPI.usersCount(),
         user: (_, { name, password }, { dataSources }) => dataSources.userAPI.user({ name, password }),
+        getUserData: (_, { userId }, { dataSources, ...rest }) => {
+          console.log("DATA", userId, rest)
+          return dataSources.dataAPI.getUserData();
+        }
+    },
+    Mutation: {
+      register: async (_, { name, password }, { dataSources }) => {
+        const data = await dataSources.userAPI.createUser({name, password});
+        return {
+          data: JSON.stringify(data),
+          message: data ? "Register success" : "Register failure",
+          success: !!data,
+        };
+      },
+      login: async (_, { name, password }, { dataSources }) => {
+        console.log("resolver",name,password)
+        const auth = await dataSources.userAPI.loginUser({name, password});
+        return {
+          data: auth,
+          message: auth ? "Login success" : "Login failure",
+          success: !!auth,
+        }
+      },
+      addUserData: async (_, {  }, { dataSources }) => dataSources.dataAPI.createUserData(data),
+      alterData: async () => {},
     }
 }
 
