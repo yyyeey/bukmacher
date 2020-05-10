@@ -10,7 +10,7 @@ class UserAPI {
     async users() {
         try {
             const dataArr = await this.usersCollection.find({}).toArray();
-            return dataArr.map(d => this.userReducer(d));
+            return dataArr.map(d => UserAPI.userReducer(d));
         } catch(err) {
             this.errorHandler(err)
             return {};
@@ -32,11 +32,16 @@ class UserAPI {
             console.log("data")
 
             console.log(data)
-            return this.userReducer(data);
+            return UserAPI.userReducer(data);
         } catch(err) {
             this.errorHandler(err)
             return {};
         }
+    }
+
+    async findUser({name, password}) {
+        const user = await this.usersCollection.findOne({"$and":[{"name":name},{"password": password}]});
+        return user ? UserAPI.userReducer(user) : null;
     }
 
     async createUser({name, password}) {
@@ -60,9 +65,9 @@ class UserAPI {
         }
     }
 
-    userReducer(user) {
+    static userReducer(user) {
         return {
-            _id: user && user._id || "0",
+            id: user && user._id || "0",
             name: user && user.name || "",
             password: user && user.password || "",
             dataIds: user && user.dataIds || [],

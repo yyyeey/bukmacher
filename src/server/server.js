@@ -31,6 +31,9 @@ client.connect().then((client, err) => {
 }).then((db, err) => {
     err && handleError(err);
 
+    const userAPI = new UserAPI(db, handleError);
+    const dataAPI = new DataAPI(db, handleError)
+
     const server = new ApolloServer({
         context: async ({req}) => {
             console.log("ctx")
@@ -38,19 +41,17 @@ client.connect().then((client, err) => {
             const [name, password] = Buffer.from(auth, 'base64').toString('ascii').split(':');
             console.log("credentials",name, password)
 
-            const user = await db.collection('Users').findOne({"$and":[{"name":name},{"password": password}]});
+            const user = await userAPI.findUser({name, password});
             console.log("found user", user)
             return { 
-                user: {
-                    ...user,
-                }
+                user,
             };
         },
         typeDefs,
         resolvers,
         dataSources: () => ({
-            userAPI: new UserAPI(db, handleError),
-            dataAPI: new DataAPI(db, handleError),
+            userAPI,
+            dataAPI,
         })
     });
     return server.listen();

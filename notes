@@ -1,0 +1,32 @@
+query {
+	users(pageSize: 3) {
+		users {
+      name
+    }
+  }
+}# Write your query or mutation here
+
+
+mutation {
+	login(name: "user", password: "pwd") {
+  }
+}# Write your query or mutation here
+
+
+
+User data insertion result: { lastErrorObject: 
+   { n: 1,
+     updatedExisting: false,
+     upserted: 5eb84a43d8b1412f1e36a5bf },
+  value: null,
+  ok: 1 }
+
+
+User data insertion result: { lastErrorObject:
+{ n: 1, updatedExisting: true },
+  value: 
+   { _id: 5eb84a43d8b1412f1e36a5bf,
+     ownerUserId: '1',
+     data: [ [Object] ] },
+  ok: 1 }
+

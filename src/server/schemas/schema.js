@@ -8,24 +8,29 @@ type User {
     dataIds: [ID]
 }
 
-type Data {
+type UserData {
     _id: ID!
+    ownerUserId: String!
     number: Int
     text: String
 }
 
-type Response {
-    data: String
-    message: String
+type Message {
+    text: String
     success: Boolean!
+}
+
+type LoginResponse {
+    message: Message
+    auth: String
 }
 
 type Query {
     users(pageSize: Int, after: String): UserConnection!
     usersCount: Int!
     user(name: String!, password: String!): User
-    data(dataId: ID!): Data
-    getUserData(userId: ID!): [Data]
+    data(dataId: ID!): UserData
+    getUserData: [UserData]
 }
 
 type UserConnection {
@@ -35,10 +40,10 @@ type UserConnection {
 }
 
 type Mutation {
-    register(name: String!, password: String!): Response
-    login(name: String!, password: String!): Response
-    addUserData(userId: ID!, number: Int, text: String): Response
-    alterData(dataId: ID!, number: Int, text: String): Response
+    register(name: String!, password: String!): Message
+    login(name: String!, password: String!): LoginResponse
+    addUserData(number: Int, text: String): Message
+    alterData(dataId: ID!, number: Int, text: String): Message
 }
 `;
 

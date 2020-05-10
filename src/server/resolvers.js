@@ -48,17 +48,16 @@ const resolvers = {
         },
         usersCount: (_, __, { dataSources }) =>  dataSources.userAPI.usersCount(),
         user: (_, { name, password }, { dataSources }) => dataSources.userAPI.user({ name, password }),
-        getUserData: (_, { userId }, { dataSources, ...rest }) => {
-          console.log("DATA", userId, rest)
-          return dataSources.dataAPI.getUserData();
+        getUserData: (_, __, { dataSources, ...rest }) => {
+          console.log("DATA", rest)
+          return dataSources.dataAPI.getUserData(rest.user.id);
         }
     },
     Mutation: {
       register: async (_, { name, password }, { dataSources }) => {
         const data = await dataSources.userAPI.createUser({name, password});
         return {
-          data: JSON.stringify(data),
-          message: data ? "Register success" : "Register failure",
+          text: data ? "Register success" : "Register failure",
           success: !!data,
         };
       },
@@ -66,12 +65,29 @@ const resolvers = {
         console.log("resolver",name,password)
         const auth = await dataSources.userAPI.loginUser({name, password});
         return {
-          data: auth,
-          message: auth ? "Login success" : "Login failure",
-          success: !!auth,
+          auth: auth,
+          message: {
+            text: auth ? "Login success" : "Login failure",
+            success: !!auth,
+          }
         }
       },
-      addUserData: async (_, {  }, { dataSources }) => dataSources.dataAPI.createUserData(data),
+      addUserData: async (_, { number, text }, { dataSources, ...rest }) => {
+        console.log("addUserData rest", rest)
+        if (rest.user) {
+          console.log("Adding user data to ",rest.user.name)
+          const data = await dataSources.dataAPI.createUserData(rest.user.id, {number, text});
+          console.log("resolver Added Data:",data)
+          return {
+            text: data ? 'Added data to user: ' + rest.user.name : 'Data not added',
+            success: !!data,
+          }
+        }
+        return {
+          text: 'Login is required',
+          success: false
+        }
+      },
       alterData: async () => {},
     }
 }
