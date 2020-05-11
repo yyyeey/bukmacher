@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { APIFOOTBALL_KEY } from './apifootball_key';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import gql from 'graphql-tag';
 
 function App() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-
+  const [usersCount, setUsersCount] = useState(0);
+  const cache = new InMemoryCache();
+  const link = new HttpLink({uri: 'http://localhost:4000'});
+  const client = new ApolloClient({ cache, link });
 
   useEffect(() => {
     const getData = async () => {
@@ -23,6 +30,14 @@ function App() {
       response => setData(response)
     );*/
   }, []);
+
+  client.query({
+    query: gql`
+      query {
+        usersCount
+      }
+    `,
+  }).then(result => setUsersCount(result.data.usersCount));
 
   console.log(data);
   return (
@@ -70,7 +85,7 @@ function App() {
             </tbody>
           </table>
         )}
-
+        <span>Users count: {usersCount}</span>
 
       </header>
     </div>

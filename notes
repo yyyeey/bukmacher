@@ -30,3 +30,4 @@ User data insertion result: { lastErrorObject:
      data: [ [Object] ] },
   ok: 1 }
 
+npx apollo service:push --graph=danielgradtest --key=user:fp.01bf81f6-70d0-428f-8eff-389fccd803d7:f54DIPER75IqkINrLPXiKA --endpoint=http://localhost:4000 
