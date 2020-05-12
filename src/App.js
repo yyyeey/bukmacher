@@ -7,10 +7,13 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 
+import UsersList from './client/UsersList';
+
 function App() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [usersCount, setUsersCount] = useState(0);
+
   const cache = new InMemoryCache();
   const link = new HttpLink({uri: 'http://localhost:4000'});
   const client = new ApolloClient({ cache, link });
@@ -86,6 +89,7 @@ function App() {
           </table>
         )}
         <span>Users count: {usersCount}</span>
+        <UsersList />
 
       </header>
     </div>
