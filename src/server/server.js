@@ -36,13 +36,10 @@ client.connect().then((client, err) => {
 
     const server = new ApolloServer({
         context: async ({req}) => {
-            console.log("ctx")
             const auth = req.headers && req.headers.authorization || '';
             const [name, password] = Buffer.from(auth, 'base64').toString('ascii').split(':');
-            console.log("credentials",name, password)
 
             const user = await userAPI.findUser({name, password});
-            console.log("found user", user)
             return { 
                 user,
             };

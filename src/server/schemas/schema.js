@@ -26,7 +26,7 @@ type LoginResponse {
 }
 
 type Query {
-    users(pageSize: Int, after: String): UserConnection!
+    users(after: String): UserConnection!
     usersCount: Int!
     user(name: String!, password: String!): User
     data(dataId: ID!): UserData

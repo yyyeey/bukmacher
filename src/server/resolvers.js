@@ -28,9 +28,12 @@ const paginateResults = ({
       : results.slice(0, pageSize);
 };
 
+const getUserCursor = user => user.id;
+
 const resolvers = {
     Query: {
-        users: async (_, { pageSize = 2, after }, { dataSources }) => {
+        users: async (_, { after }, { dataSources }) => {
+            const pageSize = 3;
             const allUsers = await dataSources.userAPI.users();
 
             console.log("DEBUG", JSON.stringify(allUsers, getCircularReplacer()))
@@ -39,6 +42,7 @@ const resolvers = {
                 after,
                 pageSize,
                 results: allUsers,
+                getCursor: getUserCursor,
             });
             return {
                 users,

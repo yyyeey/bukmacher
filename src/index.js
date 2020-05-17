@@ -8,7 +8,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const link = new HttpLink({link: 'http://localhost:4000'});
+const link = new HttpLink({uri: 'http://localhost:4000'});
 const cache = new InMemoryCache();
 const client = new ApolloClient({cache, link})
 
