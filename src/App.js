@@ -8,6 +8,7 @@ import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 
 import UsersList from './client/UsersList';
+import DataList from './client/DataList';
 
 function App() {
   const [data, setData] = useState([])
@@ -42,7 +43,6 @@ function App() {
     `,
   }).then(result => setUsersCount(result.data.usersCount));
 
-  console.log(data);
   return (
     <div className="App">
       <header className="App-header">
@@ -89,7 +89,8 @@ function App() {
           </table>
         )}
         <span>Users count: {usersCount}</span>
-        <UsersList />
+        {/*<UsersList />*/}
+        <DataList />
 
       </header>
     </div>

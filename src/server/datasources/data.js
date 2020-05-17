@@ -45,6 +45,7 @@ class DataAPI {
     async getUserData(userId) {
         // TODO: Add Mongo oriented pagination
         const data = await this.dataCollection.find({ownerUserId: userId}).toArray();
+        console.log("DataModel.getUserData",data)
         return data[0].data;
     }
 }
