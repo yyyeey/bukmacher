@@ -52,9 +52,12 @@ const resolvers = {
         },
         usersCount: (_, __, { dataSources }) =>  dataSources.userAPI.usersCount(),
         user: (_, { name, password }, { dataSources }) => dataSources.userAPI.user({ name, password }),
-        getUserData: (_, __, { dataSources, ...rest }) => {
+        getUserData: (_, __, { dataSources, user, ...rest }) => {
           console.log("DATA", rest)
-          return dataSources.dataAPI.getUserData(rest.user.id);
+          if (user) {
+            return dataSources.dataAPI.getUserData(user.id);
+          }
+          return null;
         }
     },
     Mutation: {
@@ -76,14 +79,11 @@ const resolvers = {
           }
         }
       },
-      addUserData: async (_, { number, text }, { dataSources, ...rest }) => {
-        console.log("addUserData rest", rest)
-        if (rest.user) {
-          console.log("Adding user data to ",rest.user.name)
-          const data = await dataSources.dataAPI.createUserData(rest.user.id, {number, text});
-          console.log("resolver Added Data:",data)
+      addUserData: async (_, { number, text }, { dataSources, user, ...rest }) => {
+        if (user) {
+          const data = await dataSources.dataAPI.createUserData(user.id, {number, text});
           return {
-            text: data ? 'Added data to user: ' + rest.user.name : 'Data not added',
+            text: data ? 'Added data to user: ' + user.name : 'Data not added',
             success: !!data,
           }
         }

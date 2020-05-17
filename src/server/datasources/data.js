@@ -42,9 +42,11 @@ class DataAPI {
         }
     }
 
-    getUserData(userId) {
-        console.log("data context",this.context)
-        return [{_id: 0, text: "textstring", number: 123}];
+    async getUserData(userId) {
+        console.log("getUserData", userId)
+        // TODO: Add Mongo oriented pagination
+        const data = await this.dataCollection.find({ownerUserId: userId}).toArray();
+        return data[0].data;
     }
 }
 

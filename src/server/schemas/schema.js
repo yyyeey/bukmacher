@@ -11,6 +11,10 @@ type User {
 type UserData {
     _id: ID!
     ownerUserId: String!
+    dataField: UserDataField
+}
+
+type UserDataField {
     number: Int
     text: String
 }
@@ -30,7 +34,7 @@ type Query {
     usersCount: Int!
     user(name: String!, password: String!): User
     data(dataId: ID!): UserData
-    getUserData: [UserData]
+    getUserData: [UserDataField]
 }
 
 type UserConnection {

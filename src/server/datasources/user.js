@@ -29,9 +29,8 @@ class UserAPI {
     async user({ name, password }) {
         try {
             const data = await this.usersCollection.findOne({"$and":[{"name":name},{"password": password}]});
-            console.log("data")
+            console.log("UserModel.user",data)
 
-            console.log(data)
             return UserAPI.userReducer(data);
         } catch(err) {
             this.errorHandler(err)

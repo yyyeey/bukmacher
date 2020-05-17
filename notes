@@ -7,11 +7,31 @@ query {
 }# Write your query or mutation here
 
 
-mutation {
-	login(name: "user", password: "pwd") {
+mutation Register($name: String!, $password: String!) {
+	register(name: $name, password: $password) {
+    message {
+      success
+    }
   }
 }# Write your query or mutation here
 
+mutation {
+	register(name: "asd", password: "asd) {
+    message {
+      success
+    }
+  }
+}# Write your query or mutation here
+
+query GetUsersList($pageSize: Int, $after: String) {
+  users(pageSize: $pageSize, after: $after) {
+    hasMore
+    cursor
+    users {
+      name
+    }
+  }
+}
 
 
 User data insertion result: { lastErrorObject: 
@@ -20,6 +40,7 @@ User data insertion result: { lastErrorObject:
      upserted: 5eb84a43d8b1412f1e36a5bf },
   value: null,
   ok: 1 }
+
 
 
 User data insertion result: { lastErrorObject:
