@@ -12,7 +12,7 @@ const paginateResults = ({
     if (!cursor) return results.slice(0, pageSize);
     const cursorIndex = results.findIndex(item => {
       // if an item has a `cursor` on it, use that, otherwise try to generate one
-      let itemCursor = item.cursor ? item.cursor : getCursor(item);
+      let itemCursor = item.cursor ? item.cursor : getCursor(item, results);
   
       // if there's still not a cursor, return false by default
       return itemCursor ? cursor === itemCursor : false;
@@ -28,7 +28,8 @@ const paginateResults = ({
       : results.slice(0, pageSize);
 };
 
-const getUserCursor = user => user.id;
+const getUserCursor = (user, allUsers) => user.id;
+const getDataCursor = (data, allData) => allData.indexOf(data);
 
 const resolvers = {
     Query: {
@@ -52,10 +53,26 @@ const resolvers = {
         },
         usersCount: (_, __, { dataSources }) =>  dataSources.userAPI.usersCount(),
         user: (_, { name, password }, { dataSources }) => dataSources.userAPI.user({ name, password }),
-        getUserData: (_, __, { dataSources, user, ...rest }) => {
-          console.log("DATA", rest)
+        getUserData: async (_, { after }, { dataSources, user, ...rest }) => {
+          const pageSize = 3;
           if (user) {
-            return dataSources.dataAPI.getUserData(user.id);
+            const allUserData = await dataSources.dataAPI.getUserData(user.id);
+            //console.log("allUserData",allUserData)
+            const userData = paginateResults({
+              after,
+              pageSize,
+              results: allUserData,
+              getCursor: getDataCursor,
+            });
+            console.log("Resolvers.getUserData userData",userData)
+            const cursor = userData[userData.length - 1] ? getDataCursor(userData[userData.length - 1], allUserData) : 0;
+            const allDataCursor = allUserData[allUserData.length - 1] ? getDataCursor(allUserData[allUserData.length - 1], allUserData) : 0;
+            return {
+              ownerUserId: user.id,
+              data: userData,
+              cursor,
+              hasMore: cursor !== allDataCursor,
+            };
           }
           return null;
         }
