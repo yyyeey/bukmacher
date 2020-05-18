@@ -12,6 +12,7 @@ import './App.css';
 import MainPage from './client/MainPage';
 import UsersList from './client/UsersList';
 import DataList from './client/DataList';
+import Login from './client/Login';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Link to={'/'}>MainPage</Link>
       <Link to={'/data'}>Data List</Link>
       <Link to={'/users'}>Users List</Link>
+      <Link to={'/login'}>Login</Link>
       <Switch>
 
         <Route path={'/data'}>
@@ -28,6 +30,9 @@ function App() {
         </Route>
         <Route path={'/users'}>
           {/*<UsersList />*/}
+        </Route>
+        <Route path={'/login'}>
+          <Login />
         </Route>
         <Route path={'/'}>
           <MainPage />

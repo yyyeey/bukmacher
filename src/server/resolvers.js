@@ -53,10 +53,10 @@ const resolvers = {
         },
         usersCount: (_, __, { dataSources }) =>  dataSources.userAPI.usersCount(),
         user: (_, { name, password }, { dataSources }) => dataSources.userAPI.user({ name, password }),
-        getUserData: async (_, { after }, { dataSources, /*user,*/ ...rest }) => {
+        getUserData: async (_, { after }, { dataSources, user, ...rest }) => {
           const pageSize = 3;
           // temp user obj
-          const user = await dataSources.userAPI.user({name: "testUser", password: "test123"});
+          //const user = await dataSources.userAPI.user({name: "testUser", password: "test123"});
           if (user) {
             const allUserData = await dataSources.dataAPI.getUserData(user.id);
             //console.log("allUserData",allUserData)
@@ -88,7 +88,7 @@ const resolvers = {
         };
       },
       login: async (_, { name, password }, { dataSources }) => {
-        console.log("resolver",name,password)
+        console.log("resolver login",name,password)
         const auth = await dataSources.userAPI.loginUser({name, password});
         return {
           auth: auth,

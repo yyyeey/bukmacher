@@ -19,7 +19,7 @@ const GET_USER_DATA = gql`
 
 const DataList = props => {
     const { data, loading, error, fetchMore } = useQuery(GET_USER_DATA);
-    const dataList = loading ? null : data.getUserData.data;
+    const dataList = (loading ? null : data.getUserData && data.getUserData.data) || [];
     const loadMoreData = () => fetchMore({
         variables: {
             after: data.getUserData.cursor,

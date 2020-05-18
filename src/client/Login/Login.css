@@ -1,0 +1,4 @@
+.mainForm {
+  display: flex;
+  flex-direction: column;
+}
