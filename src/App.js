@@ -1,99 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom';
+
 import logo from './logo.svg';
 import './App.css';
-import { APIFOOTBALL_KEY } from './apifootball_key';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import gql from 'graphql-tag';
 
+import MainPage from './client/MainPage';
 import UsersList from './client/UsersList';
 import DataList from './client/DataList';
 
+
 function App() {
-  const [data, setData] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [usersCount, setUsersCount] = useState(0);
-
-  const cache = new InMemoryCache();
-  const link = new HttpLink({uri: 'http://localhost:4000'});
-  const client = new ApolloClient({ cache, link });
-
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      const a = await fetch(`https://apiv2.apifootball.com/?action=get_countries&APIkey=${APIFOOTBALL_KEY}`);
-      setData(await a.json());
-      setIsLoading(false);
-    }
-    // Zaktualizuj tytuł dokumentu korzystając z interfejsu API przeglądarki
-
-    getData();
-    /*fetch(`https://apiv2.apifootball.com/?action=get_countries&APIkey=${APIFOOTBALL_KEY}`).then(
-      response => response.json()).then(
-      response => setData(response)
-    );*/
-  }, []);
-
-  client.query({
-    query: gql`
-      query {
-        usersCount
-      }
-    `,
-  }).then(result => setUsersCount(result.data.usersCount));
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        {isLoading ? (
-          <span>Loading...</span>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  country_id
-                </th>
-                <th>
-                  country_name
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map(e => {
-                return (
-                  <tr key={e.country_id}>
-                    <td>
-                      {e.country_id}
-                    </td>
-                    <td>
-                      {e.country_name}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
-        <span>Users count: {usersCount}</span>
-        {/*<UsersList />*/}
-        <DataList />
+    <BrowserRouter>
+      <img src={logo} className="App-logo" alt="logo" />
+      <Link to={'/'}>MainPage</Link>
+      <Link to={'/data'}>Data List</Link>
+      <Link to={'/users'}>Users List</Link>
+      <Switch>
 
-      </header>
-    </div>
+        <Route path={'/data'}>
+          <DataList />
+        </Route>
+        <Route path={'/users'}>
+          {/*<UsersList />*/}
+        </Route>
+        <Route path={'/'}>
+          <MainPage />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 

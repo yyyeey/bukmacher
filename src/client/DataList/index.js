@@ -1,1 +1,1 @@
-export default from './DataList';
+export { default } from './DataList';
