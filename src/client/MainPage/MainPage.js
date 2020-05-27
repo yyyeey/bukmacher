@@ -5,7 +5,7 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 
-import { APIFOOTBALL_KEY } from '../../apifootball_key';
+import { APIFOOTBALL_KEY, THE_ODDS_API_KEY } from '../../apifootball_key';
 
 
 const MainPage = props => {
@@ -17,6 +17,8 @@ const MainPage = props => {
     const link = new HttpLink({uri: 'http://localhost:4000'});
     const client = new ApolloClient({ cache, link });
     
+    const theOddsApiSportsLink = `https://api.the-odds-api.com/v3/sports/?apiKey=${THE_ODDS_API_KEY}`
+
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true);
@@ -26,7 +28,15 @@ const MainPage = props => {
         }
         // Zaktualizuj tytuł dokumentu korzystając z interfejsu API przeglądarki
 
-        getData();
+        const getTheOddsSports = async () => {
+          setIsLoading(true);
+          const a = await fetch(theOddsApiSportsLink);
+          const responseData = await a.json();
+          setData(responseData.data);
+          setIsLoading(false);
+        }
+
+        getTheOddsSports();
         /*fetch(`https://apiv2.apifootball.com/?action=get_countries&APIkey=${APIFOOTBALL_KEY}`).then(
             response => response.json()).then(
             response => setData(response)
@@ -40,6 +50,8 @@ const MainPage = props => {
           }
         `,
       }).then(result => setUsersCount(result.data.usersCount));
+    
+    console.log(data)
 
     return (
         <React.Fragment>
@@ -50,22 +62,40 @@ const MainPage = props => {
               <thead>
                 <tr>
                   <th>
-                    country_id
+                    group
                   </th>
                   <th>
-                    country_name
+                    details
+                  </th>
+                  <th>
+                    title
+                  </th>
+                  <th>
+                    active
+                  </th>
+                  <th>
+                    has_outrights
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {data.map(e => {
                   return (
-                    <tr key={e.country_id}>
+                    <tr key={e.key}>
                       <td>
-                        {e.country_id}
+                        {e.group}
                       </td>
                       <td>
-                        {e.country_name}
+                        {e.details}
+                      </td>
+                      <td>
+                        {e.title}
+                      </td>
+                      <td>
+                        {e.active.toString()}
+                      </td>
+                      <td>
+                        {e.has_outrights.toString()}
                       </td>
                     </tr>
                   );

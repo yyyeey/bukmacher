@@ -77,7 +77,10 @@ const resolvers = {
         };
       }
       return null;
-    }
+    },
+    getError: async (_, __, ___) => {
+      throw Error("Hardcoded error throw")
+    },
   },
   Mutation: {
     register: async (_, { name, password }, { dataSources }) => {

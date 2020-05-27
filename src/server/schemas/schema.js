@@ -36,6 +36,7 @@ type Query {
     user(name: String!, password: String!): User
     data(dataId: ID!): UserData
     getUserData(after: Int): UserData
+    getError: String!
 }
 
 type UserConnection {
