@@ -7,6 +7,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { CLIENT_CONSTANTS } from './constants';
 
 const link = new HttpLink({
   headers: { authorization: localStorage.getItem('token') },
@@ -14,6 +15,8 @@ const link = new HttpLink({
 });
 const cache = new InMemoryCache();
 const client = new ApolloClient({cache, link})
+
+localStorage.setItem(CLIENT_CONSTANTS.BOOKMAKER_REGION_KEY_NAME, 'uk');
 
 ReactDOM.render(
     <ApolloProvider client={client} >

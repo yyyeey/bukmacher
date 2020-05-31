@@ -13,6 +13,7 @@ import MainPage from './client/MainPage';
 import UsersList from './client/UsersList';
 import DataList from './client/DataList';
 import Login from './client/Login';
+import SportDetails from './client/MainPage/SportDetails';
 
 
 function App() {
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route path={'/login'}>
           <Login />
+        </Route>
+        <Route path='/sportDetails/:sportKey'>
+            <SportDetails />
         </Route>
         <Route path={'/'}>
           <MainPage />
