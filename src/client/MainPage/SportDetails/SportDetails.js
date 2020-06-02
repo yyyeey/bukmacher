@@ -19,10 +19,10 @@ const SportDetails = props => {
       const responseData = await a.json();
       console.log("response",responseData)
       const mappedData = responseData.data.map(e => e.sites.map(s => ({
-        time: e.commence_time,
+        time: new Date(e.commence_time*CLIENT_CONSTANTS.SECONDS_IN_MILLISECONDS).toString(),
         teams: `${e.teams[0]} vs ${e.teams[1]}`,
         bookmaker: s.site_nice,
-        last_update: s.last_update,
+        last_update: new Date(s.last_update*CLIENT_CONSTANTS.SECONDS_IN_MILLISECONDS).toString(),
         odds: `${s.odds.h2h[0]} : ${s.odds.h2h[1]}` + (s.odds.h2h.length > 2 ? ` : ${s.odds.h2h[2]}` : ''),
       }))).flat(1);
       console.log("mapped",mappedData)

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import ApolloClient from 'apollo-client';
-import classes from './Login.css';
+import './Login.css';
+import Container from '../Components/Container/Container';
 
 
 const LOGIN_MUTATION = gql`
@@ -41,41 +42,43 @@ const Login = props => {
   }
 
   return (
-    <form className={classes.mainForm} onSubmit={handleLogin}>
-      <label
-        htmlFor="userName"
-      >
-        User name:
-      </label>
-      <input
-        type="text"
-        name="userName"
-        value={userName}
-        onChange={e => setUserName(e.target.value)}
-      />
-      <label
-        htmlFor="password"
-      >
-        Password:
-      </label>
-      <input
-        type="password"
-        name="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button
-        type="submit"
-      >
-        LOGIN
-      </button>
-      <div>
-        Result:
-        {error && (<span>Error occured</span>)}
-        {loading && (<span>Loading login data</span>)}
-        {data ? <span>Success</span> : <span>Not logged in</span>}
-      </div>
-    </form>
+    <Container>
+      <form className={"mainForm"} onSubmit={handleLogin}>
+        <label
+          htmlFor="userName"
+        >
+          User name:
+        </label>
+        <input
+          type="text"
+          name="userName"
+          value={userName}
+          onChange={e => setUserName(e.target.value)}
+        />
+        <label
+          htmlFor="password"
+        >
+          Password:
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button
+          type="submit"
+        >
+          LOGIN
+        </button>
+        <div>
+          Result:
+          {error && (<span>Error occured</span>)}
+          {loading && (<span>Loading login data</span>)}
+          {data ? <span>Success</span> : <span>Not logged in</span>}
+        </div>
+      </form>
+    </Container>
   );
 }
 

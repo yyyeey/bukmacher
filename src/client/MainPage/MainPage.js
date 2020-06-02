@@ -65,19 +65,22 @@ const MainPage = props => {
               <tr>
                 <th>
                   group
-                  </th>
+                </th>
                 <th>
-                  details
-                  </th>
+                  description
+                </th>
                 <th>
                   title
-                  </th>
+                </th>
                 <th>
                   active
-                  </th>
+                </th>
                 <th>
                   has_outrights
-                  </th>
+                </th>
+                <th>
+                  details
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -98,6 +101,9 @@ const MainPage = props => {
                     </td>
                     <td>
                       {e.has_outrights.toString()}
+                    </td>
+                    <td>
+                      <a href={`/sportDetails/${e.key}`} onClick={() => history.push(`/sportDetails/${e.key}`)}>details</a>
                     </td>
                   </tr>
                 );

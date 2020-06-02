@@ -4,8 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Fix pagination:
 -How are cursors supposed to work in this implementation?
--Add Data and assign it to the Users
--Add User auth
+Create worker which will periodically read the data from API and save it in the DB to lower API cost; Serve the data from the DB
 
 Babel only transpiles code in own directory and it's subfolders
 
