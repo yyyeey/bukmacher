@@ -22,7 +22,7 @@
     "apollo-datasource": "^0.7.0",
     "apollo-datasource-mongodb": "^0.2.1",
     "apollo-link-http": "^1.5.17",
-    "apollo-server": "^2.10.0",
+    "apollo-server": "^2.25.3",
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
